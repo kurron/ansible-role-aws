@@ -1,7 +1,7 @@
 Role Name
 =========
 
-Installation of tools than any self-respecting Python developer loves and needs.
+Installation of tools than any self-respecting AWS command-line user loves and needs.
 
 Requirements
 ------------
@@ -11,10 +11,8 @@ TODO
 Role Variables
 --------------
 
-* python_pycharm_install: true
-* python_pycharm_version: 2016.2.3
-* python_pycharm_edu_install: true
-* python_pycharm_edu_version: 3.0.1
+* aws_cli_install: true
+* aws_ecs_cli_install: true
 
 Dependencies
 ------------
@@ -27,7 +25,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-      - { role: kurron.python-developer, python_pycharm_version: 2016.2.3 }
+      - { role: kurron.aws, aws_ecs_cli_install: false }
 ```
 
 License

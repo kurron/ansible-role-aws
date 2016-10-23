@@ -32,7 +32,9 @@ galaxy_info:
 
   galaxy_tags:
       - development
-      - python
+      - operations
+      - aws
+      - ecs
 
 dependencies: []
   # List your role dependencies here, one per line.

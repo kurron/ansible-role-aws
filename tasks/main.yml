@@ -1,14 +1,4 @@
 ---
-- name: Create unprivledged folders
-  become: no
-  file:
-      path: "{{item}}"
-      state: directory
-      mode: 0755
-      recurse: yes
-  with_items:
-  - "{{ansible_user_dir}}/{{python_software_directory}}"
-
 - name: Install Required Packages
   become: yes
   package:
@@ -16,104 +6,35 @@
       state: present
   with_items:
   - "curl"
-
-- name: Download Pycharm Tarball
-  become: no
-  get_url:
-      url: "https://download.jetbrains.com/python/pycharm-professional-{{python_pycharm_version}}.tar.gz"
-      dest: "{{ansible_user_dir}}/{{python_download_directory}}/pycharm-{{python_pycharm_version}}.tar.gz"
-      mode: 0444
-  when: python_pycharm_install
-
-- name: Uncompress Pycharm Tarball
-  become: no
-  unarchive:
-      src: "{{ansible_user_dir}}/{{python_download_directory}}/pycharm-{{python_pycharm_version}}.tar.gz"
-      dest: "{{ansible_user_dir}}/{{python_software_directory}}"
-      copy: no
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
-      mode: 0555
-      creates: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm-{{python_pycharm_version}}/build.txt"
-  when: python_pycharm_install
-
-- name: Create Softlink To Pycharm
-  become: no
-  file:
-      src: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm-{{python_pycharm_version}}"
-      dest: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm"
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
-      state: link
-  when: python_pycharm_install
-
-- name: Create Desktop Icon For Pycharm
-  become: no
-  template:
-      src: "templates/pycharm.desktop.j2"
-      dest: "{{ansible_user_dir}}/Desktop/pycharm.desktop"
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
-      mode: 0555
-  when: python_pycharm_install
-
-- name: Install Required Packages
-  become: yes
-  package:
-      name: "{{item}}"
-      state: present
-  with_items:
   - "python-pip"
-  - "python-dev"
 
-- name: Install Python Packages
+- name: Install AWS CLI
   become: yes
   pip:
       name: "{{item}}"
       state: latest
   with_items:
   - "pip"
-  - "setuptools"
-  - "virtualenv"
+  - "awscli"
+  when: aws_cli_install
 
-- name: Download Pycharm Edu Tarball
+- name: Test AWS CLI
   become: no
+  command: /usr/local/bin/aws --version
+  when: aws_cli_install
+
+- name: Download AWS ECS CLI
+  become: yes
   get_url:
-      url: "https://download.jetbrains.com/python/pycharm-edu-{{python_pycharm_edu_version}}.tar.gz"
-      dest: "{{ansible_user_dir}}/{{python_download_directory}}/pycharm-edu-{{python_pycharm_edu_version}}.tar.gz"
-      mode: 0444
-  when: python_pycharm_edu_install
-
-- name: Uncompress Pycharm Edu Tarball
-  become: no
-  unarchive:
-      src: "{{ansible_user_dir}}/{{python_download_directory}}/pycharm-edu-{{python_pycharm_edu_version}}.tar.gz"
-      dest: "{{ansible_user_dir}}/{{python_software_directory}}"
-      copy: no
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
+      url: "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest"
+      dest: "/usr/local/bin/ecs-cli"
       mode: 0555
-      creates: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm-edu-{{python_pycharm_edu_version}}/build.txt"
-  when: python_pycharm_edu_install
+  when: aws_ecs_cli_install
 
-- name: Create Softlink To Pycharm Edu
+- name: Test AWS ECS CLI
   become: no
-  file:
-      src: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm-edu-{{python_pycharm_edu_version}}"
-      dest: "{{ansible_user_dir}}/{{python_software_directory}}/pycharm-edu"
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
-      state: link
-  when: python_pycharm_edu_install
+  command: /usr/local/bin/ecs-cli --version
+  when: aws_ecs_cli_install
 
-- name: Create Desktop Icon For Pycharm Edu
-  become: no
-  template:
-      src: "templates/pycharm-edu.desktop.j2"
-      dest: "{{ansible_user_dir}}/Desktop/pycharm-edu.desktop"
-      owner: "{{ansible_user_uid}}"
-      group: "{{ansible_user_gid}}"
-      mode: 0555
-  when: python_pycharm_edu_install
 
 

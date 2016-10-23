@@ -1,4 +1,4 @@
 ---
 - hosts: remote
   roles:
-  - role: ../../ansible-role-python-developer
+  - role: ../../ansible-role-aws
