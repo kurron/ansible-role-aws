@@ -1,13 +1,4 @@
 ---
-- name: Install Required Packages
-  become: yes
-  package:
-      name: "{{item}}"
-      state: present
-  with_items:
-  - "curl"
-  - "python-pip"
-
 - name: Install AWS CLI
   become: yes
   pip:
@@ -35,6 +26,4 @@
   become: no
   command: /usr/local/bin/ecs-cli --version
   when: aws_ecs_cli_install
-
-
 
