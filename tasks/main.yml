@@ -11,7 +11,7 @@
 
 - name: Test AWS CLI
   become: no
-  command: /usr/local/bin/aws --version
+  command: aws --version
   when: aws_cli_install
 
 - name: Download AWS ECS CLI
@@ -24,6 +24,6 @@
 
 - name: Test AWS ECS CLI
   become: no
-  command: /usr/local/bin/ecs-cli --version
+  command: ecs-cli --version
   when: aws_ecs_cli_install
 
