@@ -1,3 +1,4 @@
 ---
 aws_cli_install: true
 aws_ecs_cli_install: true
+aws_shell_install: true

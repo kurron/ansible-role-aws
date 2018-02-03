@@ -27,3 +27,13 @@
   command: ecs-cli --version
   when: aws_ecs_cli_install
 
+- name: Install AWS Shell
+  become: yes
+  pip:
+      name: "{{item}}"
+      state: latest
+  with_items:
+  - "pip"
+  - "aws-shell"
+  when: aws_shell_install
+
