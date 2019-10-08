@@ -2,11 +2,10 @@
 - name: Install AWS CLI
   become: yes
   pip:
-      name: "{{item}}"
       state: latest
-  with_items:
-  - "pip"
-  - "awscli"
+      name:
+          - "pip"
+          - "awscli"
   when: aws_cli_install
 
 - name: Test AWS CLI
@@ -30,10 +29,9 @@
 - name: Install AWS Shell
   become: yes
   pip:
-      name: "{{item}}"
       state: latest
-  with_items:
-  - "pip"
-  - "aws-shell"
+      name:
+          - "pip"
+          - "aws-shell"
   when: aws_shell_install
 
